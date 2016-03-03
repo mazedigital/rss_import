@@ -15,18 +15,7 @@ class extension_Rss_Import extends Extension {
 		);
 
 		return $navigation;
-	}
-	
-	public function getSubscribedDelegates() {
-		return array(
-			array(
-				'page' => '/backend/',
-				'delegate' => 'InitialiseAdminPageHead',
-				'callback' => 'initializeAdmin',
-			),
-		);
-	}
-		
+	}		
 	
 	/**
 	 * Installation
