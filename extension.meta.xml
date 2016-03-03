@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension id="rss_import" status="experimental" xmlns="http://symphony-cms.com/schemas/extension/1.0">
+	<name>RSS Import</name>
+	<description>Allows user to view entries form an RSS Feed and decide which entries to import</description>
+	<authors>
+		<author>
+			<name symphony="gunglien">Jonathan Mifsud</name>
+			<email>jon@maze.digital</email>
+			<website>http://maze.digital</website>
+		</author>
+	</authors>
+	<releases>
+		<release version="0.1" date="2016-03-03" min="2.5.0" max="2.6.x"/>
+	</releases>
+</extension>
