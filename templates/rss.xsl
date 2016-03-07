@@ -4,14 +4,17 @@
 	<xsl:template match="/">
 		<table>
 			<xsl:for-each select='/jta-breaking-news/item'>
-				<xsl:variable name='description' select='description'/>
 
 				<tr guid='{guid}'>
 					<td>
 						<xsl:value-of select='title'/>
+						<a href="{link}" style='text-decoration:none;border:0;'><i class="fa fa-external-link"></i></a>
 					</td>
 					<td>
-						<xsl:value-of select='$description'/>
+						<xsl:value-of select='description'/>
+					</td>
+					<td>
+						<span date='{pubDate}'></span>
 						<input type='checkbox' name='items[{guid}]' id='{guid}'/>
 					</td>
 				</tr>

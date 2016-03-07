@@ -86,11 +86,13 @@
 			$entry->set('author_id', is_null(Symphony::Engine()->Author()) ? '1' : Symphony::Engine()->Author()->get('id'));
 			$entry->set('modification_date_gmt', DateTimeObj::getGMT('Y-m-d H:i:s'));
 			$entry->set('modification_date', DateTimeObj::get('Y-m-d H:i:s'));
+			$entry->set('creation_date_gmt', DateTimeObj::getGMT('Y-m-d H:i:s'));
 			$entry->set('creation_date', DateTimeObj::get('Y-m-d H:i:s'));
 
 			$values = array();
 
 			$values['headline'] = $result->getChildByName('title',0)->getValue();
+			$values['link']['handle'] = General::createHandle($result->getChildByName('title',0)->getValue());
 			$values['excerpt'] = RssImportManager::markdownify($result->getChildByName('description',0)->getValue());
 			$values['body'] = RssImportManager::markdownify($result->getChildByName('content',0)->getValue());
 			$values['authors'] = $result->getChildByName('author',0)->getValue();
@@ -118,7 +120,36 @@
 
 			if (!$passed) return self::__ERROR_VALIDATING__;
 			else {
-				$entry->commit();
+
+				$section = SectionManager::fetch($options['section']);
+
+				###
+				# Delegate: XMLImporterEntryPreCreate
+				# Description: Just prior to creation of an Entry. Entry object provided
+				Symphony::ExtensionManager()->notifyMembers(
+					'XMLImporterEntryPreCreate', '/xmlimporter/importers/run/',
+					array(
+						'section'	=> $section,
+						'fields'	=> &$values,
+						'entry'		=> &$entry
+					)
+				);
+
+				// $entry->commit();
+				EntryManager::add($entry);
+				$entry->set('importer_status', 'created');
+
+				###
+				# Delegate: XMLImporterEntryPostCreate
+				# Description: Creation of an Entry. New Entry object is provided.
+				Symphony::ExtensionManager()->notifyMembers(
+					'XMLImporterEntryPostCreate', '/xmlimporter/importers/run/',
+					array(
+						'section'	=> $section,
+						'entry'		=> $entry,
+						'fields'	=> $values
+					)
+				);
 
 				Symphony::Database()->insert( array(
 					'entry_id' => $entry->get('id'),

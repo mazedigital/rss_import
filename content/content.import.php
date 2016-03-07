@@ -10,6 +10,8 @@
 
 		public function build(array $context = array()) {
 
+			Administration::instance()->Page->addStylesheetToHead('//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css', 'screen', 221);
+
 			if (isset($context[0])) {
 				$this->datasource = $context[0];
 				unset($context[0]);
@@ -104,6 +106,17 @@
 			}
 
 			foreach ($rows as $key => $row) {
+
+				// set the date according to Symphony Timestamp
+				$td = $row->getChildByName('td',2);
+				$span = $td->getChild(0);
+
+				$date = $span->getAttribute('date');
+				$time = strtotime($date);
+				$date = date('d M Y H:i',$time);
+				$span->setValue($date);
+				// var_dump($date);die;
+
 				if (isset($guidIds[$row->getAttribute('guid')])){
 					$row->setAttribute('disabled','disabled');
 
@@ -113,7 +126,7 @@
 					$td->replaceValue($a);
 
 					//remove checkbox so cannot be seleted
-					$td = $row->getChildByName('td',1);
+					$td = $row->getChildByName('td',2);
 					$td->removeChildAt(1);
 				}
 			}
@@ -137,6 +150,13 @@
 				'handle' => 'description',
 				'attrs' => array(
 					'id' => 'field-description'
+				)
+			);
+			$columns[] = array(
+				'label' => __('Publish Date'),
+				'handle' => 'publish-date',
+				'attrs' => array(
+					'id' => 'field-publish-date'
 				)
 			);
 
@@ -181,7 +201,6 @@
 							//only if user or has Permissions
 							RssImportManager::create($guid);
 						}
-						redirect(extension_RSS_Import::baseURL() . '/import/');
 
 						break;
 				}
