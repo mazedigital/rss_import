@@ -21,6 +21,11 @@
 
 		}
 
+		// for the time being allow every author to access this page - eventually might need to add some permissions
+		public function canAccessPage(){
+			return true;
+		}
+
 		public function __viewIndex() {
 
 			if ($this->datasource){
