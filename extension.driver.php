@@ -1,7 +1,5 @@
 <?php
 
-include_once(EXTENSIONS . '/rss_import/lib/class.rssimport.php');
-
 class extension_Rss_Import extends Extension {
 
 	public function fetchNavigation()

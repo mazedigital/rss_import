@@ -3,6 +3,7 @@
 	require_once(TOOLKIT . '/class.administrationpage.php');
 	require_once(TOOLKIT . '/class.eventmanager.php');
 	require_once CONTENT . '/class.sortable.php';
+	require_once(EXTENSIONS . '/rss_import/lib/class.rssimport.php');
 
 	Class contentExtensionRss_ImportImport extends AdministrationPage {
 
