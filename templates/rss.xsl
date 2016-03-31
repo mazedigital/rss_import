@@ -8,7 +8,7 @@
 				<tr guid='{guid}'>
 					<td>
 						<xsl:value-of select='title'/>
-						<a href="{link}" style='text-decoration:none;border:0;'><i class="fa fa-external-link"></i></a>
+						<a href="{link}" style='text-decoration:none;border:0;' target='_blank'><i class="fa fa-external-link"></i></a>
 					</td>
 					<td>
 						<xsl:value-of select='description'/>

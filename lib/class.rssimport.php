@@ -15,6 +15,9 @@
 			// anything in divs should not be considered as content
 			$markdownify->drop[] = 'div';
 
+			// use inline links
+			$markdownify->linksInline = true;
+
 			$markdown = $markdownify->parseString($string);
 			$markdown = htmlspecialchars($markdown, ENT_NOQUOTES, 'UTF-8');
 			return $markdown;
