@@ -5,7 +5,7 @@
 
 	<xsl:template match="/">
 		<single>
-			<xsl:for-each select='/jta-breaking-news/item[guid=$guid]'>
+			<xsl:for-each select='/*/item[guid=$guid]'>
 				<xsl:variable name='description' select='description'/>
 				<title>
 					<xsl:value-of select='title'/>

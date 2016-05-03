@@ -30,17 +30,9 @@
 		 * @param boolean $purge_members
 		 * @return boolean
 		 */
-		public static function create($guid) {
-			//delete only if has permissions to. IE Developer or same author ID
+		public static function create($guid,$datasource) {
 
-			$datasources = DatasourceManager::listAll();
-			$datasources = array_filter($datasources,function($var){
-				if ($var['source'] == 'RemoteDatasource')
-					return 1;
-				else return 0;
-			});
-
-			$datasource = DatasourceManager::create($datasources['jta_breaking_news']['handle']);
+			$datasource = DatasourceManager::create($datasource);
 			
 			$result = $datasource->execute();
 

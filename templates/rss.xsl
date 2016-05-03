@@ -3,7 +3,7 @@
 
 	<xsl:template match="/">
 		<table>
-			<xsl:for-each select='/jta-breaking-news/item'>
+			<xsl:for-each select='/*/item'>
 
 				<tr guid='{guid}'>
 					<td>

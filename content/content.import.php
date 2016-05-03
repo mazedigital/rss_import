@@ -205,7 +205,7 @@
 					case 'create':
 						foreach($checked as $guid) {
 							//only if user or has Permissions
-							RssImportManager::create($guid);
+							RssImportManager::create($guid,$this->datasource);
 						}
 
 						break;
