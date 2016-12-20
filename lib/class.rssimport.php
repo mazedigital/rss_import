@@ -44,7 +44,6 @@
 				$xsl->load(EXTENSIONS.'/rss_import/templates/single.xsl');
 
 				$variable = $xsl->createElementNS('http://www.w3.org/1999/XSL/Transform','xsl:param');
-				// var_dump($variable);die;
 
 				$domAttribute = $xsl->createAttribute('name');
 				$domAttribute->value = 'guid';
@@ -66,7 +65,6 @@
 				$html = trim(substr($proc->transformToXML($dom), strlen('<?xml version="1.0"?>')));
 
 			// echo $html;die;
-
 			
 			$result = XMLElement::convertFromXMLString('single',$html);
 
@@ -91,8 +89,8 @@
 			$values['excerpt'] = RssImportManager::markdownify($result->getChildByName('description',0)->getValue());
 			$values['body'] = RssImportManager::markdownify($result->getChildByName('content',0)->getValue());
 			$values['authors'] = $result->getChildByName('author',0)->getValue();
-			$values['publish-date'] = $result->getChildByName('pubDate',0)->getValue();
-			$values['updated-date'] = $result->getChildByName('pubDate',0)->getValue();
+			$values['publish-date'] = $result->getChildByName('date',0)->getValue();
+			$values['updated-date'] = $result->getChildByName('date',0)->getValue();
 			$values['type'] = 'Article';
 			$values['section'] = '50393';
 

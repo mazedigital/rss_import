@@ -10,6 +10,9 @@
 				<title>
 					<xsl:value-of select='title'/>
 				</title>
+				<date>
+					<xsl:value-of select='pubDate'/>
+				</date>
 				<description>
 					<xsl:value-of select='description'/>
 				</description>
