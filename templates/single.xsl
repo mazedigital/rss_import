@@ -10,6 +10,9 @@
 				<title>
 					<xsl:value-of select='title'/>
 				</title>
+				<section>
+					<xsl:value-of select='category'/>
+				</section>
 				<date>
 					<xsl:value-of select='pubDate'/>
 				</date>

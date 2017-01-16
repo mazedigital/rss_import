@@ -32,6 +32,8 @@
 		 */
 		public static function create($guid,$datasource) {
 
+
+
 			$datasource = DatasourceManager::create($datasource);
 			
 			$result = $datasource->execute();
@@ -68,6 +70,8 @@
 			
 			$result = XMLElement::convertFromXMLString('single',$html);
 
+			
+
 			$current = array();
 
 			$options = array(
@@ -84,17 +88,35 @@
 
 			$values = array();
 
+			// var_dump($result->getChildByName('section',0)->getValue());die;
+
+			//if no JTA link is found in first 40 characters, add it.
+
+			$content = RssImportManager::markdownify($result->getChildByName('content',0)->getValue());
+
+			if($content...){
+				//Add JTA link
+				$values['body'] = "";
+				$values['body'] .= $content;
+			}
+			else{
+				$values['body'] = $content;
+			}
+
 			$values['headline'] = $result->getChildByName('title',0)->getValue();
 			$values['link']['handle'] = General::createHandle($result->getChildByName('title',0)->getValue());
 			$values['excerpt'] = RssImportManager::markdownify($result->getChildByName('description',0)->getValue());
-			$values['body'] = RssImportManager::markdownify($result->getChildByName('content',0)->getValue());
 			$values['authors'] = $result->getChildByName('author',0)->getValue();
 			$values['publish-date'] = $result->getChildByName('date',0)->getValue();
 			$values['updated-date'] = $result->getChildByName('date',0)->getValue();
 			$values['type'] = 'Article';
 			$values['section'] = '50393';
 
+			// var_dump($result->getChildByName('author',0)->getValue());die;
+
 			$passed = true;
+
+
 
 			// Validate:
 			try {
@@ -112,6 +134,7 @@
 
 				Symphony::Log()->pushToLog(sprintf('RSS Import: Failed to set values for %s, %s', $guid, $ex->getMessage()), E_NOTICE, true);
 			}
+
 
 			if (!$passed) return self::__ERROR_VALIDATING__;
 			else {
