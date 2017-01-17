@@ -88,8 +88,6 @@
 
 			$values = array();
 
-			// var_dump($result->getChildByName('section',0)->getValue());die;
-
 			//if no JTA link is found in first 40 characters, add it.
 
 			$content = RssImportManager::markdownify($result->getChildByName('content',0)->getValue());
@@ -182,6 +180,21 @@
 					), 'tbl_rss_import' );
 			}
 
+			//Send slack message
+			$hook = "https://hooks.slack.com/services/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";
+
+			$settings = [
+			    'username' => 'JTA Import',
+			    'channel' => '@seanvella', //testing
+			    'link_names' => true
+			];
+
+			$client = new Maknz\Slack\Client($hook, $settings);
+
+			$id = (string)$entry->get('id');
+			$message = "Created a new JTA article. http://www.forward.com/" . $id;
+
+			$client->send($message);
 
 			return self::__OK__;
 		}
