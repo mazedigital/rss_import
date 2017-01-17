@@ -75,7 +75,7 @@
 			$current = array();
 
 			$options = array(
-					'section' => '3',
+					'section' => '3', //Breaking news
 				);
 
 			$entry = EntryManager::create();
@@ -93,10 +93,21 @@
 			//if no JTA link is found in first 40 characters, add it.
 
 			$content = RssImportManager::markdownify($result->getChildByName('content',0)->getValue());
+			$authors = $result->getChildByName('author',0)->getValue();
+			$jtaAuthor = false;
 
-			if($content...){
+			$authorArray = explode(',', $authors);
+
+			foreach ($authorArray as $key => $value) {
+				if($value == 'JTA'){
+					$jtaAuthor = true;
+				}
+			}
+
+			//Check if does not have credit and author is not JTA
+			if(!preg_match('/^.{0,20}\\(\\[?(Reuters|JTA)\\]?/',$content) and not($jtaAuthor)){
 				//Add JTA link
-				$values['body'] = "";
+				$values['body'] = "([JTA](http://www.jta.org '')) — ";
 				$values['body'] .= $content;
 			}
 			else{
@@ -106,17 +117,13 @@
 			$values['headline'] = $result->getChildByName('title',0)->getValue();
 			$values['link']['handle'] = General::createHandle($result->getChildByName('title',0)->getValue());
 			$values['excerpt'] = RssImportManager::markdownify($result->getChildByName('description',0)->getValue());
-			$values['authors'] = $result->getChildByName('author',0)->getValue();
+			$values['authors'] = $authors;
 			$values['publish-date'] = $result->getChildByName('date',0)->getValue();
 			$values['updated-date'] = $result->getChildByName('date',0)->getValue();
 			$values['type'] = 'Article';
 			$values['section'] = '50393';
 
-			// var_dump($result->getChildByName('author',0)->getValue());die;
-
 			$passed = true;
-
-
 
 			// Validate:
 			try {
