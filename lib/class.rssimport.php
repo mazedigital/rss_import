@@ -106,14 +106,14 @@
 			if(!preg_match('/^.{0,20}\\(\\[?(Reuters|JTA)\\]?/',$content) and !$jtaAuthor){
 				//Add JTA link
 				$values['body'] = "([JTA](http://www.jta.org '')) — ";
-				$values['body'] .= ucwords($content);
+				$values['body'] .= $content;
 			}
 			else{
-				$values['body'] = ucwords($content);
+				$values['body'] = $content;
 			}
 
 
-			$values['headline'] = $result->getChildByName('title',0)->getValue();
+			$values['headline'] = ucwords($result->getChildByName('title',0)->getValue());
 			$values['link']['handle'] = General::createHandle($result->getChildByName('title',0)->getValue());
 			$values['excerpt'] = str_replace('(JTA) — ', '', RssImportManager::markdownify($result->getChildByName('description',0)->getValue()));
 			$values['authors'] = $authors;
