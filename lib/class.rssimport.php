@@ -122,8 +122,6 @@
 			$values['type'] = 'Article';
 			$values['section'] = '50393';
 
-			var_dump($values);die;
-
 
 			$passed = true;
 
