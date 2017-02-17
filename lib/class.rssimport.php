@@ -103,23 +103,27 @@
 			}
 
 			//Check if does not have credit and author is not JTA
-			if(!preg_match('/^.{0,20}\\(\\[?(Reuters|JTA)\\]?/',$content) and not($jtaAuthor)){
+			if(!preg_match('/^.{0,20}\\(\\[?(Reuters|JTA)\\]?/',$content) and !$jtaAuthor){
 				//Add JTA link
 				$values['body'] = "([JTA](http://www.jta.org '')) — ";
-				$values['body'] .= $content;
+				$values['body'] .= ucwords($content);
 			}
 			else{
-				$values['body'] = $content;
+				$values['body'] = ucwords($content);
 			}
+
 
 			$values['headline'] = $result->getChildByName('title',0)->getValue();
 			$values['link']['handle'] = General::createHandle($result->getChildByName('title',0)->getValue());
-			$values['excerpt'] = RssImportManager::markdownify($result->getChildByName('description',0)->getValue());
+			$values['excerpt'] = str_replace('(JTA) — ', '', RssImportManager::markdownify($result->getChildByName('description',0)->getValue()));
 			$values['authors'] = $authors;
 			$values['publish-date'] = $result->getChildByName('date',0)->getValue();
 			$values['updated-date'] = $result->getChildByName('date',0)->getValue();
 			$values['type'] = 'Article';
 			$values['section'] = '50393';
+
+			var_dump($values);die;
+
 
 			$passed = true;
 
@@ -179,22 +183,6 @@
 					'guid' => $guid,
 					), 'tbl_rss_import' );
 			}
-
-			//Send slack message
-			$hook = "https://hooks.slack.com/services/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";
-
-			$settings = [
-			    'username' => 'JTA Import',
-			    'channel' => '@seanvella', //testing
-			    'link_names' => true
-			];
-
-			$client = new Maknz\Slack\Client($hook, $settings);
-
-			$id = (string)$entry->get('id');
-			$message = "Created a new JTA article. http://www.forward.com/" . $id;
-
-			$client->send($message);
 
 			return self::__OK__;
 		}
