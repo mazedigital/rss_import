@@ -23,6 +23,10 @@
 			return $markdown;
 		}
 
+		function upper($matches) {
+		  return strtoupper($matches[0]);
+		}
+
 		/**
 		 * Insert an entry given a `$guid`.
 		 *
@@ -114,6 +118,12 @@
 
 
 			$values['headline'] = ucwords($result->getChildByName('title',0)->getValue());
+
+			$values['headline'] = preg_replace_callback('/([A-Z]*)([^A-Z]+)([A-Z]+)/i', 
+		        function ($matches) {
+		            $return = ucwords(strtolower($matches[1])).$matches[2].ucwords(strtolower($matches[3]));
+		            return $return;
+		        }, $values['headline']);
 			$values['link']['handle'] = General::createHandle($result->getChildByName('title',0)->getValue());
 			$values['excerpt'] = str_replace('(JTA) — ', '', RssImportManager::markdownify($result->getChildByName('description',0)->getValue()));
 			$values['authors'] = $authors;
@@ -121,7 +131,6 @@
 			$values['updated-date'] = $result->getChildByName('date',0)->getValue();
 			$values['type'] = 'Article';
 			$values['section'] = '50393';
-
 
 			$passed = true;
 
