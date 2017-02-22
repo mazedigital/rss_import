@@ -144,7 +144,7 @@
 
 			$values['headline'] = RssImportManager::titleCase($result->getChildByName('title',0)->getValue());
 			$values['link']['handle'] = General::createHandle($result->getChildByName('title',0)->getValue());
-			$values['excerpt'] = str_replace('(JTA) — ', '', RssImportManager::markdownify($result->getChildByName('description',0)->getValue()));
+			$values['excerpt'] = str_replace('(JTA)', '', RssImportManager::markdownify($result->getChildByName('description',0)->getValue()));
 			$values['authors'] = $authors;
 			$values['publish-date'] = $result->getChildByName('date',0)->getValue();
 			$values['updated-date'] = $result->getChildByName('date',0)->getValue();
