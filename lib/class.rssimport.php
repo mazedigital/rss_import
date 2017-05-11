@@ -108,6 +108,8 @@
 					'section' => '3', //Breaking news
 				);
 
+			// echo '1';
+
 			$entry = EntryManager::create();
 			$entry->set('section_id', $options['section']);
 			$entry->set('author_id', is_null(Symphony::Engine()->Author()) ? '1' : Symphony::Engine()->Author()->get('id'));
@@ -142,9 +144,13 @@
 				$values['body'] = $content;
 			}
 
+			$excerpt = RssImportManager::markdownify($result->getChildByName('description',0)->getValue());
+
+			$excerpt = (strlen($excerpt) > 150) ? substr($excerpt,0,147)."..." : $excerpt; // 150 max character limit
+
 			$values['headline'] = RssImportManager::titleCase($result->getChildByName('title',0)->getValue());
 			$values['link']['handle'] = General::createHandle($result->getChildByName('title',0)->getValue());
-			$values['excerpt'] = str_replace('(JTA)', '', RssImportManager::markdownify($result->getChildByName('description',0)->getValue()));
+			$values['excerpt'] = str_replace('(JTA)', '', $excerpt);
 			$values['authors'] = $authors;
 			$values['publish-date'] = $result->getChildByName('date',0)->getValue();
 			$values['updated-date'] = $result->getChildByName('date',0)->getValue();
@@ -152,6 +158,7 @@
 			$values['section'] = '50393';
 
 			$passed = true;
+
 
 			// Validate:
 			try {
