@@ -136,20 +136,32 @@
 			//Check if does not have credit and author is not JTA
 			if(!preg_match('/^.{0,20}\\(\\[?(Reuters|JTA)\\]?/',$content) and !$jtaAuthor){
 				//Add JTA link
-				$values['body'] = "([JTA](http://www.jta.org '')) — ";
+				$values['body'] = "([JTA](http://www.jta.org '')) ";
+				// $values['body'] = "([JTA](http://www.jta.org '')) — ";
 				$values['body'] .= $content;
 			}
 			else{
 				$values['body'] = $content;
 			}
+			// var_dump($content);
 
 			$excerpt = RssImportManager::markdownify($result->getChildByName('description',0)->getValue());
 
-			$excerpt = (strlen($excerpt) > 150) ? substr($excerpt,0,147)."..." : $excerpt; // 150 max character limit
+			preg_match('/(http|https):(.*?)com/', $excerpt, $match);
+
+			$excerpt = preg_replace('/(http|https):(.*?)com/', '', $excerpt);
+
+			$pos = strpos($excerpt, '.');
+			$pos .= -1;
+
+			$excerpt = substr($excerpt, 0, $pos) .$match[0].'.';
+
+			// $excerpt = (strlen($excerpt) > 150) ? substr($excerpt,0,147)."..." : $excerpt; // 150 max character limit
+			// var_dump($excerpt);die;
 
 			$values['headline'] = RssImportManager::titleCase($result->getChildByName('title',0)->getValue());
 			$values['link']['handle'] = General::createHandle($result->getChildByName('title',0)->getValue());
-			$values['excerpt'] = str_replace('(JTA)', '', $excerpt);
+			$values['social-description'] = str_replace('(JTA) — ', '', $excerpt);
 			$values['authors'] = $authors;
 			$values['publish-date'] = $result->getChildByName('date',0)->getValue();
 			$values['updated-date'] = $result->getChildByName('date',0)->getValue();
