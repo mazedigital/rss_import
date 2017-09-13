@@ -124,7 +124,6 @@
 			$content = RssImportManager::markdownify($result->getChildByName('content',0)->getValue());
 			$authors = $result->getChildByName('author',0)->getValue();
 			$jtaAuthor = false;
-
 			$authorArray = explode(',', $authors);
 
 			foreach ($authorArray as $key => $value) {
@@ -161,7 +160,7 @@
 
 			$values['headline'] = RssImportManager::titleCase($result->getChildByName('title',0)->getValue());
 			$values['link']['handle'] = General::createHandle($result->getChildByName('title',0)->getValue());
-			$values['social-description'] = str_replace('(JTA) — ', '', $excerpt);
+			$values['excerpt'] = str_replace('(JTA) — ', '', $excerpt);
 			$values['authors'] = $authors;
 			$values['publish-date'] = $result->getChildByName('date',0)->getValue();
 			$values['updated-date'] = $result->getChildByName('date',0)->getValue();
